@@ -67,17 +67,28 @@
     const xA = 1300;
     const yA = 1080;
 
-    // ESCALAS aproximadas (graus por pixel)
-    const escalaLon = 0.00001;  // 1 pixel ≈ 0.00001 grau de longitude
-    const escalaLat = 0.00001;  // 1 pixel ≈ 0.00001 grau de latitude
+ function converterCoordenadas(lat, lon) {
+  // Pontos de referência — ajuste esses valores com base no seu mapa
+  const latA = -9.350612, lonA = -37.987495, xA = 1300, yA = 1080;
+  const latB = -9.351500, lonB = -37.985000, xB = 1700, yB = 800;
 
-    function converterCoordenadas(lat, lon) {
-      const dx = (lon - lonA) / escalaLon;
-      const dy = (lat - latA) / escalaLat;
-      const x = xA + dx;
-      const y = yA + dy;
-      return { x, y };
-    }
+  // Diferenças em coordenadas
+  const dLat = latB - latA;
+  const dLon = lonB - lonA;
+  const dX = xB - xA;
+  const dY = yB - yA;
+
+  // Escalas reais
+  const escalaX = dX / dLon;
+  const escalaY = dY / dLat;
+
+  // Conversão
+  const x = xA + (lon - lonA) * escalaX;
+  const y = yA + (lat - latA) * escalaY;
+
+  return { x, y };
+}
+
 
     function atualizarLocalizacao(lat, lon) {
       const coords = converterCoordenadas(lat, lon);
